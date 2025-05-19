@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Priyadharshini E - Portfolio</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              dark: '#0a0a16',
+              darker: '#05050d',
+              accent: '#6d28d9',
+              highlight: '#8b5cf6',
+              glow: '#c4b5fd',
+              blue: '#3b82f6',
+              pink: '#ec4899',
+            },
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'spin-slow': 'spin 20s linear infinite',
+            'pulse-slow': 'pulse 4s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #0a0a16;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .star-field {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .planet {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(1px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    #planet1 {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle at 70% 30%, #8b5cf6 0%, #3b82f6 100%);
+      top: 15%;
+      right: -50px;
+      box-shadow: 0 0 60px rgba(139, 92, 246, 0.3);
+    }
+
+    #planet2 {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at 30% 70%, #a855f7 0%, #ec4899 100%);
+      bottom: 10%;
+      left: -30px;
+      box-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+    }
+
+    #planet3 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0.1) 50%, transparent 100%);
+      top: 60%;
+      right: 10%;
+      opacity: 0.3;
+    }
+    
+    .orbit {
+      position: fixed;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .nav-item {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #8b5cf6, #ec4899);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-item:hover::after {
+      width: 100%;
+    }
+    
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #8b5cf6, #ec4899, transparent);
+      margin: 5rem auto;
+      width: 80%;
+      max-width: 800px;
+    }
+    
+    .skill-bar {
+      position: relative;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .skill-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(to right, #8b5cf6, #ec4899);
+      transition: width 1s ease;
+    }
+    
+    .card {
+      background: rgba(15, 15, 35, 0.6);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.15), 0 0 10px rgba(139, 92, 246, 0.3);
+      border-color: rgba(139, 92, 246, 0.5);
+    }
+    
+    .glow-text {
+      text-shadow: 0 0 5px rgba(196, 181, 253, 0.7);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(45deg, #6d28d9, #8b5cf6);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(30deg);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    
+    .btn-primary:hover::after {
+      opacity: 1;
+      transform: rotate(30deg) translate(50%, -50%);
+    }
+    
+    .solar-system {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    
+    .sun {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #fde047, #f97316);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px rgba(249, 115, 22, 0.7);
+    }
+    
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: float 2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- Background Elements -->
+  <div class="star-field" id="starField"></div>
+  <div class="planet" id="planet1"></div>
+  <div class="planet" id="planet2"></div>
+  <div class="planet" id="planet3"></div>
+  <div class="orbit" style="width: 600px; height: 600px; top: 20%; right: -200px;"></div>
+  <div class="orbit" style="width: 400px; height: 400px; bottom: 10%; left: -100px;"></div>
+  
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef } = React;
+
+    // Star Background
+    const StarBackground = () => {
+      const canvasRef = useRef(null);
+      
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const stars = [];
+        const numStars = Math.floor(canvas.width * canvas.height / 1000);
+        
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5,
+            opacity: Math.random() * 0.8 + 0.2,
+            pulse: Math.random() * 0.1 + 0.95
+          });
+        }
+        
+        const draw = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI);
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.fill();
+            
+            star.opacity *= star.pulse;
+            
+            if (star.opacity <= 0.2) star.pulse = 1.05;
+            if (star.opacity >= 1) star.pulse = 0.95;
+          });
+          
+          requestAnimationFrame(draw);
+        };
+        
+        draw();
+        
+        const handleResize = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        };
+        
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
+      
+      return <canvas ref={canvasRef} className="star-field"></canvas>;
+    };
+
+    // Navigation Component
+    const Navbar = () => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [scrolled, setScrolled] = useState(false);
+      const navItems = [
+        { name: 'Home', href: '#home' },
+        { name: 'About', href: '#about' },
+        { name: 'Skills', href: '#skills' },
+        { name: 'Experience', href: '#experience' },
+        { name: 'Projects', href: '#projects' },
+        { name: 'Certifications', href: '#certifications' },
+        { name: 'Contact', href: '#contact' },
+      ];
+      
+      useEffect(() => {
+        const handleScroll = () => {
+          setScrolled(window.scrollY > 50);
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
+
+      return (
+        <nav className={`fixed w-full z-20 transition-all duration-300 ${scrolled ? 'bg-space-darker bg-opacity-80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex items-center">
+                <span className="font-orbitron font-bold text-xl text-white flex items-center">
+                  <span className="text-space-pink">P</span>riya<span className="text-space-blue">.</span>
+                </span>
+              </div>
+              <div className="hidden md:flex items-center space-x-6">
+                {navItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="nav-item text-gray-300 hover:text-white px-2 py-1 text-sm font-medium"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+              <div className="md:hidden flex items-center">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="text-white focus:outline-none"
+                  aria-label="Toggle menu"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {isOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          {isOpen && (
+            <div className="md:hidden bg-space-darker bg-opacity-95 backdrop-blur-md">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                {navItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="block text-gray-300 hover:text-white hover:bg-space-accent hover:bg-opacity-20 px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </nav>
+      );
+    };
+
+    // Animated gradient text
+    const GradientText = ({ children, className = "" }) => (
+      <span className={`bg-clip-text text-transparent bg-gradient-to-r from-space-accent to-space-pink ${className}`}>
+        {children}
+      </span>
+    );
+
+    // Home Component
+    const Home = () => {
+      const [typing, setTyping] = useState("");
+      const fullText = "Full Stack Developer & ML Enthusiast";
+      const typingSpeed = 80;
+      
+      useEffect(() => {
+        if (typing.length < fullText.length) {
+          const timeout = setTimeout(() => {
+            setTyping(fullText.slice(0, typing.length + 1));
+          }, typingSpeed);
+          
+          return () => clearTimeout(timeout);
+        }
+      }, [typing]);
+      
+      return (
+        <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+          <div className="text-center z-10">
+            <p className="text-space-glow mb-2">Hello, I'm</p>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 glow-text">
+              <GradientText>Priyadharshini E</GradientText>
+            </h1>
+            <div className="h-8 mb-6">
+              <p className="text-lg sm:text-xl font-light">
+                {typing}<span className="animate-pulse">|</span>
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 justify-center mb-8">
+              <div className="bg-space-darker bg-opacity-50 px-4 py-2 rounded-full border border-space-accent border-opacity-30 flex items-center">
+                <i className="fas fa-code mr-2 text-space-highlight"></i>
+                <span>MERN Stack</span>
+              </div>
+              <div className="bg-space-darker bg-opacity-50 px-4 py-2 rounded-full border border-space-accent border-opacity-30 flex items-center">
+                <i className="fas fa-brain mr-2 text-space-highlight"></i>
+                <span>Machine Learning</span>
+              </div>
+              <div className="bg-space-darker bg-opacity-50 px-4 py-2 rounded-full border border-space-accent border-opacity-30 flex items-center">
+                <i className="fas fa-palette mr-2 text-space-highlight"></i>
+                <span>UI/UX Design</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a href="#contact" className="btn-primary px-6 py-3 rounded-full text-white font-medium flex items-center">
+                <i className="fas fa-paper-plane mr-2"></i>
+                Contact Me
+              </a>
+              <a href="#projects" className="bg-transparent border border-space-accent text-white px-6 py-3 rounded-full hover:bg-space-accent hover:bg-opacity-10 transition-all duration-300 flex items-center">
+                <i className="fas fa-eye mr-2"></i>
+                View Projects
+              </a>
+            </div>
+          </div>
+          
+          <div className="scroll-indicator">
+            <div className="animate-bounce flex flex-col items-center">
+              <span className="text-sm text-gray-400 mb-1">Scroll Down</span>
+              <i className="fas fa-chevron-down text-space-glow"></i>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // About Component
+    const About = () => (
+      <section id="about" className="min-h-screen py-20 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+              <GradientText>About Me</GradientText>
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div className="order-2 md:order-1">
+              <p className="text-lg mb-6 leading-relaxed">
+                I'm an Information Technology graduate specializing in full-stack development (MERN stack) and machine learning (Python, TensorFlow). As a frontend developer at Aazad Academy, I build responsive web applications using modern JavaScript and React frameworks.
+              </p>
+              <p className="text-lg mb-6 leading-relaxed">
+                I'm skilled in building responsive web applications with expertise in React and JavaScript. I'm also proficient in database systems (SQL, MongoDB) and cloud platforms (AWS). My foundation in data structures, algorithms, and software engineering principles allows me to create efficient and scalable solutions.
+              </p>
+              <p className="text-lg mb-6 leading-relaxed">
+                Outside of coding, I enjoy photography, traveling, playing shuttle badminton, and video editing.
+              </p>
+              
+              <div className="flex flex-wrap gap-4 mt-8">
+                <a href="mailto:priyaiasdharshini@gmail.com" className="flex items-center bg-space-darker bg-opacity-70 border border-space-accent border-opacity-30 px-4 py-2 rounded-lg hover:bg-space-accent hover:bg-opacity-20 transition-all duration-300">
+                  <i className="fas fa-envelope mr-2 text-space-highlight"></i>
+                  Email Me
+                </a>
+                <a href="https://www.linkedin.com/in/priyadharshinie" target="_blank" className="flex items-center bg-space-darker bg-opacity-70 border border-space-accent border-opacity-30 px-4 py-2 rounded-lg hover:bg-space-accent hover:bg-opacity-20 transition-all duration-300">
+                  <i className="fab fa-linkedin mr-2 text-space-highlight"></i>
+                  LinkedIn
+                </a>
+                <a href="https://github.com/" target="_blank" className="flex items-center bg-space-darker bg-opacity-70 border border-space-accent border-opacity-30 px-4 py-2 rounded-lg hover:bg-space-accent hover:bg-opacity-20 transition-all duration-300">
+                  <i className="fab fa-github mr-2 text-space-highlight"></i>
+                  GitHub
+                </a>
+              </div>
+            </div>
+            
+            <div className="order-1 md:order-2">
+              <div className="solar-system">
+                <div className="sun animate-pulse-slow"></div>
+                <div className="orbit-path absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border border-space-glow border-opacity-20 animate-spin-slow" style={{ animationDuration: '20s' }}>
+                  <div className="absolute w-8 h-8 bg-space-blue rounded-full top-1/2 -mt-4 -ml-4"></div>
+                </div>
+                <div className="orbit-path absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 rounded-full border border-space-glow border-opacity-20 animate-spin-slow" style={{ animationDuration: '30s' }}>
+                  <div className="absolute w-6 h-6 bg-space-pink rounded-full top-1/2 -mt-3 -ml-3"></div>
+                </div>
+                <div className="orbit-path absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-space-glow border-opacity-20 animate-spin-slow" style={{ animationDuration: '40s' }}>
+                  <div className="absolute w-10 h-10 bg-space-accent rounded-full top-1/2 -mt-5 -ml-5"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+    
+    // Skills Component
+    const Skills = () => {
+      const skillCategories = [
+        {
+          name: "Programming Languages",
+          skills: [
+            { name: "JavaScript", level: 85 },
+            { name: "Python", level: 80 },
+            { name: "HTML/CSS", level: 90 },
+            { name: "Java", level: 70 },
+            { name: "SQL", level: 75 },
+            { name: "C", level: 65 }
+          ]
+        },
+        {
+          name: "Frameworks & Libraries",
+          skills: [
+            { name: "React", level: 85 },
+            { name: "Node.js", level: 80 },
+            { name: "TensorFlow", level: 75 },
+            { name: "Flask", level: 70 },
+            { name: "Keras", level: 75 },
+            { name: "NLTK", level: 65 }
+          ]
+        },
+        {
+          name: "Tools & Platforms",
+          skills: [
+            { name: "AWS", level: 70 },
+            { name: "Docker", level: 65 },
+            { name: "Kubernetes", level: 60 },
+            { name: "Git", level: 80 },
+            { name: "Figma", level: 75 },
+            { name: "MongoDB", level: 75 }
+          ]
+        }
+      ];
+      
+      const [visible, setVisible] = useState(false);
+      
+      useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        }, { threshold: 0.1 });
+        
+        const section = document.getElementById('skills');
+        if (section) observer.observe(section);
+        
+        return () => observer.disconnect();
+      }, []);
+      
+      return (
+        <section id="skills" className="py-20 px-4 relative bg-space-darker bg-opacity-40">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+                <GradientText>Technical Skills</GradientText>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {skillCategories.map((category, index) => (
+                <div key={index} className="card p-6 rounded-xl">
+                  <h3 className="text-xl font-bold mb-6 text-center">
+                    <GradientText>{category.name}</GradientText>
+                  </h3>
+                  <div className="space-y-5">
+                    {category.skills.map((skill, skillIndex) => (
+                      <div key={skillIndex}>
+                        <div className="flex justify-between mb-1">
+                          <span>{skill.name}</span>
+                          <span>{skill.level}%</span>
+                        </div>
+                        <div className="skill-bar">
+                          <div 
+                            className="skill-progress" 
+                            style={{ 
+                              width: visible ? `${skill.level}%` : '0%',
+                              transition: `width 1s ease-in-out ${skillIndex * 0.2}s`
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-16 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="card p-6 rounded-xl text-center">
+                <div className="text-4xl text-space-highlight mb-4">
+                  <i className="fas fa-server"></i>
+                </div>
+                <h4 className="text-lg font-bold mb-2">Backend Development</h4>
+                <p className="text-gray-300">Node.js, Express, REST APIs, GraphQL</p>
+              </div>
+              
+              <div className="card p-6 rounded-xl text-center">
+                <div className="text-4xl text-space-highlight mb-4">
+                  <i className="fas fa-paint-brush"></i>
+                </div>
+                <h4 className="text-lg font-bold mb-2">Frontend Development</h4>
+                <p className="text-gray-300">React, JavaScript, Responsive Design</p>
+              </div>
+              
+              <div className="card p-6 rounded-xl text-center">
+                <div className="text-4xl text-space-highlight mb-4">
+                  <i className="fas fa-brain"></i>
+                </div>
+                <h4 className="text-lg font-bold mb-2">Machine Learning</h4>
+                <p className="text-gray-300">Python, TensorFlow, Image Classification</p>
+              </div>
+              
+              <div className="card p-6 rounded-xl text-center">
+                <div className="text-4xl text-space-highlight mb-4">
+                  <i className="fas fa-database"></i>
+                </div>
+                <h4 className="text-lg font-bold mb-2">Database Systems</h4>
+                <p className="text-gray-300">SQL, MongoDB, PostgreSQL, MySQL</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // Experience Component
+    const Experience = () => {
+      const experiences = [
+        {
+          title: "Frontend Developer",
+          company: "Aazad Academy",
+          period: "Present",
+          description: "Specializing in building responsive web applications using modern JavaScript, React frameworks. Focused on creating optimized user experiences with cross-browser compatibility and accessibility standards.",
+          icon: "fas fa-laptop-code"
+        }
+      ];
+
+      return (
+        <section id="experience" className="py-20 px-4 relative">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+                <GradientText>Experience</GradientText>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+            </div>
+            
+            <div className="max-w-3xl mx-auto">
+              {experiences.map((exp, index) => (
+                <div key={index} className="relative">
+                  <div className="flex items-start">
+                    <div className="hidden md:flex flex-col items-center mr-8">
+                      <div className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent">
+                        <i className={`${exp.icon} text-space-highlight`}></i>
+                      </div>
+                      {index < experiences.length - 1 && (
+                        <div className="w-0.5 bg-gradient-to-b from-space-accent to-transparent h-24"></div>
+                      )}
+                    </div>
+                    <div className="card p-6 rounded-xl mb-10 md:mb-16 w-full">
+                      <div className="md:hidden mb-4 w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent">
+                        <i className={`${exp.icon} text-space-highlight`}></i>
+                      </div>
+                      <h3 className="text-xl font-bold mb-1">{exp.title}</h3>
+                      <div className="flex items-center mb-4">
+                        <span className="text-space-highlight">{exp.company}</span>
+                        <span className="mx-2">•</span>
+                        <span className="text-gray-400">{exp.period}</span>
+                      </div>
+                      <p className="text-gray-300">{exp.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center mt-12">
+              <h3 className="text-xl font-bold mb-4">Education</h3>
+              <div className="card p-6 rounded-xl max-w-2xl mx-auto">
+                <h4 className="text-lg font-bold">Bachelor of Technology - Information Technology</h4>
+                <p className="text-space-highlight">Mepco Schlenk Engineering College Sivakasi, Tamilnadu</p>
+                <div className="flex justify-center gap-x-4 mt-2 text-gray-300">
+                  <span>Aug 2020 - Apr 2024</span>
+               
+                </div>
+                <div className="mt-4 text-gray-300">
+                  <p>Courses: Operating Systems, Data Structures, Analysis Of Algorithms, Artificial Intelligence, Machine Learning, Networking, Databases</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+      );
+    };
+
+    // Projects Component
+    const Projects = () => {
+      const projects = [
+        {
+          name: "Diabetic Retinopathy Classification",
+          description: "Developed an advanced image classification system using a hybrid deep learning model integrated with optimization algorithms. Automated severity-based classification of diabetic retinopathy to enhance diagnostic accuracy and reliability.",
+          tech: ["Python", "TensorFlow", "Keras", "Computer Vision"],
+          period: "Nov 2023 - Apr 2024",
+          icon: "fas fa-eye"
+        },
+        {
+          name: "Instagram Home Page Redesign",
+          description: "Redesigned Instagram's home page with a focus on a clean, user-friendly, and visually appealing experience. Implemented a modern and intuitive layout for seamless navigation.",
+          tech: ["UI/UX", "Figma", "Design Principles"],
+          period: "Nov 2024",
+          icon: "fab fa-instagram"
+        },
+        {
+          name: "Rishi Cozy Cabin – Resort Website",
+          description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
+          tech: ["HTML", "CSS", "JavaScript", "Responsive Design"],
+          period: "Mar 2025",
+          icon: "fas fa-hotel"
+        },
+              {
+          name: "Hill Paradise – Resort Website",
+          description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
+          tech: ["React", "Responsive Design"],
+          period: "May 2025",
+          icon: "fas fa-hotel"
+        },
+         {
+          name: "OneX Tuition – Academy Website",
+          description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
+          tech: ["React", "Responsive Design"],
+          period: "Apr 2025",
+          icon: "fa-solid fa-graduation-cap"
+        },
+         {
+          name: "SriDigital – Flex Website",
+          description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
+          tech: ["React", "Responsive Design"],
+          period: "May 2025",
+          icon: "fa-brands fa-draft2digital"
+        },
+      ];
+
+      return (
+        <section id="projects" className="py-20 px-4 relative bg-space-darker bg-opacity-40">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+                <GradientText>Projects</GradientText>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project, index) => (
+                <div key={index} className="card p-6 rounded-xl hover:translate-y-[-5px] transition-all duration-300">
+                  <div className="w-16 h-16 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent mb-6 mx-auto">
+                    <i className={`${project.icon} text-3xl text-space-highlight`}></i>
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-center">{project.name}</h3>
+                  <div className="text-center text-gray-400 mb-3">{project.period}</div>
+                  <p className="text-gray-300 mb-4">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 justify-center mb-4">
+                    {project.tech.map((tech, techIndex) => (
+                      <span key={techIndex} className="bg-space-accent bg-opacity-20 px-3 py-1 rounded-full text-xs">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="text-center mt-4">
+                    <a href="#" className="inline-flex items-center text-space-highlight hover:text-space-glow transition-colors duration-300">
+                      <span className="mr-1">View Details</span>
+                      <i className="fas fa-arrow-right text-xs"></i>
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // Certifications Component
+    const Certifications = () => {
+      const certifications = [
+        { name: "JavaScript", issuer: "Guvi - Google education partner" },
+        { name: "Robotic process automation", issuer: "Guvi - Google education partner Associated with UI path learning partner" },
+        { name: "ChatGPT for everyone", issuer: "Guvi - Google education partner" },
+        { name: "UI/UX for beginner", issuer: "Great learning Academy" },
+        { name: "Oxford achiever", issuer: "Oxford University" },
+        { name: "Spoken tutorial for Java", issuer: "IIT Bombay" },
+        { name: "Data Structures and Algorithms using Python - Part 1,2", issuer: "Infosys Springboard" },
+        { name: "Database Management system part 1,2", issuer: "Infosys Springboard" },
+        { name: "Introduction to NoSQL databases", issuer: "Infosys Springboard" },
+        { name: "Object oriented programming using Python", issuer: "Infosys Springboard" },
+        { name: "Programming Fundamentals using python - part 1,2", issuer: "Infosys Springboard" },
+        { name: "Software engineering and Agile software development", issuer: "Infosys Springboard" },
+        { name: "Graphic Designing", issuer: "Digitech Marketing Solutions Google partner" },
+        { name: "Introduction to Data Analytics", issuer: "Simplilearn Skillup" }
+      ];
+
+      return (
+        <section id="certifications" className="py-20 px-4 relative">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+                <GradientText>Certifications</GradientText>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              {certifications.map((cert, index) => (
+                <div key={index} className="card p-5 rounded-xl flex items-center">
+                  <div className="mr-4 text-space-highlight">
+                    <i className="fas fa-certificate text-2xl"></i>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">{cert.name}</h3>
+                    <p className="text-gray-400 text-sm">{cert.issuer}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // Contact Component
+    const Contact = () => {
+      const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: ""
+      });
+      
+      const handleChange = (e) => {
+        setFormData({
+          ...formData,
+          [e.target.id]: e.target.value
+        });
+      };
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        alert("Form submitted! (Demo only)");
+      };
+
+      return (
+        <section id="contact" className="py-20 px-4 relative bg-space-darker bg-opacity-40">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
+                <GradientText>Get In Touch</GradientText>
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="card p-6 rounded-xl mb-8">
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent mr-4">
+                      <i className="fas fa-envelope text-space-highlight"></i>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-medium">Email</h3>
+                      <a href="mailto:priyaiasdharshini@gmail.com" className="text-space-highlight hover:text-space-glow transition-colors duration-300">
+                        priyaiasdharshini@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent mr-4">
+                      <i className="fas fa-phone text-space-highlight"></i>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-medium">Phone</h3>
+                      <a href="tel:+918838184517" className="text-space-highlight hover:text-space-glow transition-colors duration-300">
+                        +91 8838184517
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent mr-4">
+                      <i className="fas fa-map-marker-alt text-space-highlight"></i>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-medium">Location</h3>
+                      <p className="text-gray-300">Tenkasi, Tamilnadu, India</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center space-x-6">
+                  <a href="https://www.linkedin.com/in/priyadharshinie/" target="_blank" className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent hover:bg-space-accent hover:bg-opacity-30 transition-all duration-300">
+                    <i className="fab fa-linkedin-in text-space-highlight"></i>
+                  </a>
+                  <a href="https://github.com/priyaiasdharshini" target="_blank" className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent hover:bg-space-accent hover:bg-opacity-30 transition-all duration-300">
+                    <i className="fab fa-github text-space-highlight"></i>
+                  </a>
+                  <a href="#" target="_blank" className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent hover:bg-space-accent hover:bg-opacity-30 transition-all duration-300">
+                    <i className="fab fa-twitter text-space-highlight"></i>
+                  </a>
+                  <a href="#" target="_blank" className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent hover:bg-space-accent hover:bg-opacity-30 transition-all duration-300">
+                    <i className="fab fa-instagram text-space-highlight"></i>
+                  </a>
+                </div>
+              </div>
+              
+              <div>
+                <form onSubmit={handleSubmit} className="card p-6 rounded-xl">
+                  <div className="mb-4">
+                    <label htmlFor="name" className="block text-lg font-medium mb-2">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      className="w-full bg-space-darker bg-opacity-50 p-3 rounded-lg border border-space-accent border-opacity-30 focus:border-space-highlight focus:ring-2 focus:ring-space-highlight focus:ring-opacity-30 focus:outline-none transition-all duration-300 text-white"
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="email" className="block text-lg font-medium mb-2">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="w-full bg-space-darker bg-opacity-50 p-3 rounded-lg border border-space-accent border-opacity-30 focus:border-space-highlight focus:ring-2 focus:ring-space-highlight focus:ring-opacity-30 focus:outline-none transition-all duration-300 text-white"
+                      placeholder="Your Email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <label htmlFor="message" className="block text-lg font-medium mb-2">Message</label>
+                    <textarea
+                      id="message"
+                      className="w-full bg-space-darker bg-opacity-50 p-3 rounded-lg border border-space-accent border-opacity-30 focus:border-space-highlight focus:ring-2 focus:ring-space-highlight focus:ring-opacity-30 focus:outline-none transition-all duration-300 text-white"
+                      rows="4"
+                      placeholder="Your Message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full btn-primary p-3 rounded-lg text-white font-medium flex items-center justify-center"
+                  >
+                    <span>Send Message</span>
+                    <i className="fas fa-paper-plane ml-2"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // Footer Component
+    const Footer = () => {
+      const currentYear = new Date().getFullYear();
+      
+      return (
+        <footer className="py-8 px-4 bg-space-darker relative">
+          <div className="max-w-6xl mx-auto text-center">
+            <div className="mb-4">
+              <span className="font-orbitron font-bold text-2xl text-white">
+                <span className="text-space-pink">P</span>riya<span className="text-space-blue">.</span>
+              </span>
+            </div>
+            <p className="text-gray-400">
+              © {currentYear} Priyadharshini E. All Rights Reserved.
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-space-accent to-space-pink mx-auto mt-6"></div>
+          </div>
+          
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-space-accent to-transparent opacity-30"></div>
+        </footer>
+      );
+    };
+
+    // Main App Component
+    const App = () => {
+      return (
+        <div className="relative">
+          <StarBackground />
+          <Navbar />
+          <div>
+            <Home />
+            <About />
+            <Skills />
+            <Experience />
+            <Projects />
+            <Certifications />
+            <Contact />
+            <Footer />
+          </div>
+        </div>
+      );
+    };
+
+    // Render the App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
