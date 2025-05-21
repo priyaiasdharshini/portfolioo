@@ -314,6 +314,7 @@
         { name: 'Projects', href: '#projects' },
         { name: 'Certifications', href: '#certifications' },
         { name: 'Contact', href: '#contact' },
+        { name: 'Resume', href: 'https://drive.google.com/file/d/1OYpcoDxH21UvhWhF7GKvnyRykiuE7qC0/view?usp=drive_link', external: true },
       ];
       
       useEffect(() => {
@@ -342,6 +343,8 @@
                   <a
                     key={item.name}
                     href={item.href}
+                    target={item.external ? '_blank' : '_self'}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
                     className="nav-item text-gray-300 hover:text-white px-2 py-1 text-sm font-medium"
                   >
                     {item.name}
@@ -372,6 +375,8 @@
                   <a
                     key={item.name}
                     href={item.href}
+                    target={item.external ? '_blank' : '_self'}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
                     className="block text-gray-300 hover:text-white hover:bg-space-accent hover:bg-opacity-20 px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
                     onClick={() => setIsOpen(false)}
                   >
@@ -432,6 +437,10 @@
               <div className="bg-space-darker bg-opacity-50 px-4 py-2 rounded-full border border-space-accent border-opacity-30 flex items-center">
                 <i className="fas fa-palette mr-2 text-space-highlight"></i>
                 <span>UI/UX Design</span>
+              </div>
+              <div className="bg-space-darker bg-opacity-50 px-4 py-2 rounded-full border border-space-accent border-opacity-30 flex items-center">
+                <i className="fa-solid fa-infinity mr-2 text-space-highlight"></i>
+                <span>DevOps</span>
               </div>
             </div>
             <div className="flex flex-wrap gap-4 justify-center">
@@ -703,7 +712,6 @@
                 <p className="text-space-highlight">Mepco Schlenk Engineering College Sivakasi, Tamilnadu</p>
                 <div className="flex justify-center gap-x-4 mt-2 text-gray-300">
                   <span>Aug 2020 - Apr 2024</span>
-               
                 </div>
                 <div className="mt-4 text-gray-300">
                   <p>Courses: Operating Systems, Data Structures, Analysis Of Algorithms, Artificial Intelligence, Machine Learning, Networking, Databases</p>
@@ -740,21 +748,21 @@
           period: "Mar 2025",
           icon: "fas fa-hotel"
         },
-              {
+        {
           name: "Hill Paradise – Resort Website",
           description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
           tech: ["React", "Responsive Design"],
           period: "May 2025",
           icon: "fas fa-hotel"
         },
-         {
+        {
           name: "OneX Tuition – Academy Website",
           description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
           tech: ["React", "Responsive Design"],
           period: "Apr 2025",
           icon: "fa-solid fa-graduation-cap"
         },
-         {
+        {
           name: "SriDigital – Flex Website",
           description: "Designed and implemented a responsive, user-friendly resort website. Optimized booking functionality, enhanced user engagement, and improved overall performance for seamless user experience.",
           tech: ["React", "Responsive Design"],
@@ -903,6 +911,18 @@
                       <h3 className="text-lg font-medium">Phone</h3>
                       <a href="tel:+918838184517" className="text-space-highlight hover:text-space-glow transition-colors duration-300">
                         +91 8838184517
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 bg-space-accent bg-opacity-20 rounded-full flex items-center justify-center border border-space-accent mr-4">
+                      <i className="fas fa-file-alt text-space-highlight"></i>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-medium">Resume</h3>
+                      <a href="https://drive.google.com/file/d/1OYpcoDxH21UvhWhF7GKvnyRykiuE7qC0/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="text-space-highlight hover:text-space-glow transition-colors duration-300">
+                        Download Resume
                       </a>
                     </div>
                   </div>
